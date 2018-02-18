@@ -1,76 +1,47 @@
 package a_Zadanie_4;
 
-import java.util.Random;
+import java.util.Arrays;
 
 public class KostkaDoGry {
 
 	public static void main(String[] args) {
 
-		String cube = "2D6-2";
-		System.out.println(cubeRecon(cube));
+		String cubeDesc = "3D6-5";
+		int[] parameters = getCubeParameters(cubeDesc);
+		System.out.println(Arrays.toString(parameters));
+		Cube cube = new Cube(parameters[0], parameters[1], parameters[2]);
+		System.out.println(cube.calculateRoll());
 
 	}
 
-	public static int cubeRecon(String cube) {
-
+	public static int[] getCubeParameters(String cube) {
 		String[] cubeToArrFirstStage = cube.split("D");
 		String[] cubeToArrPlus = cubeToArrFirstStage[1].split("\\+");
-		String[] cubeToArrMinus = cubeToArrFirstStage[1].split("-");
-		Random r = new Random();
-		int result = 0;
+		String[] cubeToArrMinus = cubeToArrFirstStage[1].split("\\-");
 
-		if (cubeToArrPlus.length == 1 && cubeToArrMinus.length == 1) {
-			if (cubeToArrFirstStage[0].equals("")) {
-				int y = Integer.parseInt(cubeToArrPlus[0]);
-				int roll = r.nextInt(y) + 1;
-				result = roll;
-			} else {
-				int x = Integer.parseInt(cubeToArrFirstStage[0]);
-				int y = Integer.parseInt(cubeToArrFirstStage[1]);
+		int x = 1;
+		int y = 1;
+		int z = 0;
 
-				for (int i = 0; i < x; i++) {
-					int roll = r.nextInt(y) + 1;
-					result += roll;
-				}
-			}
-		} else {
-			int z = 0;
-			int y = 0;
-			if (cubeToArrPlus.length != 1) {
-				z = Integer.parseInt(cubeToArrPlus[1]);
-			} else {
-				z = -Integer.parseInt(cubeToArrMinus[1]);
-			}
-
-			if (cubeToArrFirstStage[0].equals("")) {
-				if (z > 0) {
-					y = Integer.parseInt(cubeToArrPlus[0]);
-				} else {
-					y = Integer.parseInt(cubeToArrMinus[0]);
-				}
-				int roll = r.nextInt(y) + 1;
-
-				result = roll + z;
-
-			} else {
-				int x = Integer.parseInt(cubeToArrFirstStage[0]);
-				if (z > 0) {
-					y = Integer.parseInt(cubeToArrPlus[0]);
-				} else {
-					y = Integer.parseInt(cubeToArrMinus[0]);
-				}
-				System.out.println("[" + x + ", " + y + ", " + z + "]");
-
-				for (int i = 0; i < x; i++) {
-					int roll = r.nextInt(y) + 1;
-					result += roll;
-				}
-				result = result + z;
-
-			}
-
+		if (!cubeToArrFirstStage[0].equals("")) {
+			x = Integer.parseInt(cubeToArrFirstStage[0]);
 		}
 
+		if (cubeToArrPlus.length != 1) {
+			y = Integer.parseInt(cubeToArrPlus[0]);
+			z = Integer.parseInt(cubeToArrPlus[1]);
+		}
+
+		if (cubeToArrMinus.length != 1) {
+			y = Integer.parseInt(cubeToArrMinus[0]);
+			z = -Integer.parseInt(cubeToArrMinus[1]);
+		}
+
+		if (cubeToArrPlus.length == 1 && cubeToArrMinus.length == 1) {
+			y = Integer.parseInt(cubeToArrFirstStage[1]);
+		}
+
+		int[] result = { x, y, z };
 		return result;
 	}
 }
